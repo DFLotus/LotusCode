@@ -9,7 +9,24 @@ class verify(commands.Cog):
 
     @app_commands.command(name="verify", description="Verifys users leetcode account")
     async def verify(self, interaction: discord.Interaction):
-        await interaction.response.send_message(content="Verification in process")
+        user: discord.member.Member = interaction.user
+        user_id = interaction.user.id
+
+        await interaction.response.send_message(
+            content=f"Verification in process: <@{user_id}> please check your DM "
+        )
+
+        try:
+            await user.send("Please proceed to your leetcode profile")
+        except discord.Forbidden:
+            print(
+                f"Failed to send a direct message to {user.name}#{user.discriminator}. Make sure the user allows direct messages from this server."
+            )
+            await interaction.response.send_message(
+                content=f"Failed to send a direct message to <@{user_id}>. Make sure the user allows direct messages from this server."
+            )
+        except Exception as e:
+            print(f"An error occurred while sending a direct message: {e}")
 
 
 async def setup(client: commands.Bot) -> None:
