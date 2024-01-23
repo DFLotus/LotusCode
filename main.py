@@ -24,7 +24,7 @@ def main() -> None:
         await client.change_presence(activity=discord.Game("LeetCode"))
         try:
             await loadExt(client)
-            synced: list = await client.tree.sync()  # used to fetch slash commands
+            synced: list = await client.tree.sync()  # used to sync commands to bot and fetch slash commands
             print(f"Synced {len(synced)} commands")
         except Exception as error:
             print(f"Failed to sync with error {error}")
