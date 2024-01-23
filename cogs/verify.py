@@ -1,6 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+import requests
 
 
 class verify(commands.Cog):
@@ -12,6 +13,7 @@ class verify(commands.Cog):
         user: discord.member.Member = interaction.user
         userId = interaction.user.id
         try:
+            await fetchLeetCodeAccount(user_input)
             await interaction.response.send_message(
                 content=f"Verification successful found <@{userId}> account: {user_input}"
             )
@@ -22,6 +24,15 @@ class verify(commands.Cog):
             await self.client.send_message(
                 content=f"Verification unsuccessful failed to find account <@{userId}>"
             )
+
+
+async def fetchLeetCodeAccount(accountName: str) -> None:
+    try:
+        res = requests.get(
+            f"https://leetcode.com/{accountName}/"
+        )  # Verifys that the account exisit
+    except Exception as e:
+        print(f"Error fetching url with error: {e}")
 
 
 async def setup(client: commands.Bot) -> None:
